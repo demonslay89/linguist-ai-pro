@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Linguist AI Translator</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      background: #f5f6fa;
+      text-align: center;
+      padding: 40px;
+    }
+    textarea {
+      width: 90%;
+      max-width: 600px;
+      height: 120px;
+      margin: 10px auto;
+      display: block;
+      font-size: 16px;
+      padding: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 6px;
+      background: #0070f3;
+      color: white;
+    }
+    #output {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <h1>🌐 Linguist AI Translator</h1>
+  <p>Translate between Indian languages and English — free and accurate.</p>
+
+  <textarea id="inputText" placeholder="Type something in any Indian language..."></textarea>
+  <button id="translateBtn">Translate to English</button>
+  <div id="output"></div>
+
+  <script>
+    const btn = document.getElementById('translateBtn');
+    const output = document.getElementById('output');
+    const input = document.getElementById('inputText');
+
+    btn.addEventListener('click', async () => {
+      const text = input.value.trim();
+      if (!text) return alert('Please enter some text!');
+      output.textContent = 'Translating... ⏳';
+      try {
+        const res = await fetch('/api/translate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ q: text })
+        });
+        const data = await res.json();
+        output.textContent = data.translation || 'Translation failed.';
+      } catch (e) {
+        output.textContent = 'Error connecting to server.';
+      }
+    });
+  </script>
+</body>
+</html>
